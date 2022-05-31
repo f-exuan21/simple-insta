@@ -1,11 +1,11 @@
 import { useContext } from 'react';
 import { UserContext } from '../store/UserContext';
+import { PostContext } from '../store/PostContext';
+import { FollowContext } from '../store/FollowContext';
 import { Container } from 'reactstrap';
 import ProfileHeader from './ProfileHeader';
 import ProfileBody from './ProfileBody';
 import './Profile.css';
-import { Post } from '../../data/Post';
-import { Follow } from '../../data/Follow';
 
 const Profile = () => {
     const { users } = useContext(UserContext);
@@ -13,18 +13,20 @@ const Profile = () => {
     const getUser = () => {
         return users.find((user) => id === user.id);
     };
+	const { name, img } = getUser();
+	const { posts } = useContext(PostContext);
+	const { follows } = useContext(FollowContext);
 
     const getPosts = () => {
-        const userPosts = Post.filter((post) => post.userId === id);
-        return userPosts;
+        return posts.filter((post) => post.userId === id);
     };
     const getFollower = () => {
-        return Follow.filter((follow) => follow.following === id);
+        return follows.filter((follow) => follow.following === id);
     };
     const getFollowing = () => {
-        return Follow.filter((follow) => follow.follower == id);
+        return follows.filter((follow) => follow.follower == id);
     };
-    const { name, img } = getUser();
+
     return (
         <>
             <ProfileHeader name={name}></ProfileHeader>
