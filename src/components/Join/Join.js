@@ -1,42 +1,61 @@
-import './Login.css';
-import { Container, Row, Col, Form, Input, Button, Alert } from 'reactstrap';
+import './Join.css';
+import { Button, Container, Row, Col, Form, Input } from 'reactstrap';
 import { useContext, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { UserContext } from '../store/UserContext';
+import { Alert } from 'bootstrap';
 
-const BootstrapLogin = () => {
+const Join = () => {
     const navigate = useNavigate();
-
-    const [isFail, setIsFail] = useState(false);
+    const { users, insertUsers } = useContext(UserContext);
 
     const [user, setUser] = useState({
         id: '',
         password: '',
+        name: '',
     });
+
+    const [text, setText] = useState('');
+
+    const [isFail, setIsFail] = useState(false);
 
     const onChangeHandler = (e) => {
         const { name, value } = e.target;
         setUser({ ...user, [name]: value });
     };
 
-    const { users } = useContext(UserContext);
-
-    const onSubmitLogin = (e) => {
+    const onSubmitJoin = (e) => {
         e.preventDefault();
-        const findUser = users.find(
-            (data) => data.userId === user.id && data.password === user.password
-        );
+
+        const findUser = users.find((data) => data.userId === user.id);
         if (findUser) {
-            localStorage.setItem('id', findUser.id);
-            navigate('/');
+            openAlert('이미 존재하는 아이디');
+            return;
+        } else if (user.id === '') {
+            openAlert('아이디를 입력해주세요.');
+            return;
+        } else if (user.password === '') {
+            openAlert('패스워드를 입력해주세요.');
+            return;
+        } else if (user.name === '') {
+            openAlert('이름을 입력해주세요');
+            return;
         } else {
-            setIsFail(true);
-            setTimeout(() => closeAlert(), 3000);
+            insertUsers(user);
+            localStorage.setItem('id', users.length + 1);
+            navigate('/');
         }
     };
 
+    const openAlert = (text) => {
+        setIsFail(true);
+        setText(text);
+        setTimeout(() => closeAlert(), 3000);
+    };
+
     const closeAlert = () => {
-        setIsFail(false);
+        setIsFail(true);
+        setText('');
     };
 
     return (
@@ -50,13 +69,13 @@ const BootstrapLogin = () => {
                         ></img>
                     </Col>
                     <Col xl={12}>
-                        <Form className="LoginForm">
+                        <Form className="JoinForm">
                             {isFail ? (
                                 <Alert
                                     color="warning"
                                     toggle={() => closeAlert()}
                                 >
-                                    아이디 또는 비밀번호가 틀렸습니다.
+                                    {text}
                                 </Alert>
                             ) : null}
                             <Input
@@ -71,13 +90,19 @@ const BootstrapLogin = () => {
                                 name="password"
                                 onChange={(e) => onChangeHandler(e)}
                             ></Input>
+                            <Input
+                                type="text"
+                                placeholder="name"
+                                name="name"
+                                onChange={(e) => onChangeHandler(e)}
+                            ></Input>
                             <Button
                                 type="submit"
                                 color="primary"
-                                onClick={onSubmitLogin}
                                 block
+                                onClick={(e) => onSubmitJoin(e)}
                             >
-                                로그인
+                                가입
                             </Button>
                         </Form>
                     </Col>
@@ -86,11 +111,12 @@ const BootstrapLogin = () => {
             <Container className="bg-light border">
                 <Row style={{ padding: '1em', textAlign: 'center' }}>
                     <p>
-                        계정이 없으신가요? <Link to={'/join'}>가입하기</Link>
+                        계정이 있으신가요? <Link to={'/login'}>로그인</Link>
                     </p>
                 </Row>
             </Container>
         </div>
     );
 };
-export default BootstrapLogin;
+
+export default Join;
