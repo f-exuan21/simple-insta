@@ -1,0 +1,13 @@
+.LoginForm {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.container {
+    width: 45% !important;
+}
+
+.LoginPage {
+    margin-top: 5em;
+}
