@@ -1,0 +1,19 @@
+.Posts {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.PostsImgBox {
+    cursor: pointer;
+    position: relative;
+    height: 230px;
+    
+}
+
+.PostsImg {
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);   
+}
