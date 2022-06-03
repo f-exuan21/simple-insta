@@ -46,3 +46,8 @@ export const putUsers = async (users, user, id) => {
     newUsers.splice(findUsersIndex, 1, { ...users[findUsersIndex], name, img });
     return newUsers;
 };
+
+export const getUserByKey = async (users, key) => {
+    const findUserByKey = await users.find((user) => key.test(user.name));
+    return findUserByKey;
+};

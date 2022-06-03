@@ -3,19 +3,19 @@ export const Post = [
         id: 0,
         userId: 1,
         img: '/img/post/1.jpg',
-        content: 'user 0 안녕하세요!',
+        content: 'user 1 안녕하세요!',
     },
     {
         id: 1,
         userId: 1,
         img: '/img/post/2.jpg',
-        content: 'user 0 안녕하세요!',
+        content: 'user 2 안녕하세요!',
     },
     {
         id: 2,
         userId: 1,
         img: '/img/post/3.jpg',
-        content: 'user 0 안녕하세요!',
+        content: 'user 3 안녕하세요!',
     },
     {
         id: 3,

@@ -13,6 +13,7 @@ import { Post } from './data/Post';
 import { Follow } from './data/Follow';
 import { PostContext } from './components/store/PostContext';
 import { FollowContext } from './components/store/FollowContext';
+import Search from './components/search/Search';
 
 function App() {
     const [users, setUsers] = useState(Users); //Users로 users를 초기화
@@ -76,7 +77,7 @@ function App() {
                                 ></Route>
                                 <Route
                                     path="/search"
-                                    element={<Main />}
+                                    element={<Search />}
                                 ></Route>
                                 <Route
                                     path="/camera"

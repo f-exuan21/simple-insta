@@ -37,3 +37,10 @@ export const putPost = async (posts, post, id) => {
     newposts.slice(findPostIndex, 1, { ...posts[findPostIndex], content, img });
     return newposts;
 };
+
+export const getPostByKey = async (posts, key, userId) => {
+    const findPostByKey = await posts.filter(
+        (post) => userId === post.userId || key.test(post.content)
+    );
+    return findPostByKey;
+};

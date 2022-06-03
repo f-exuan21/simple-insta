@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { Post } from '../../data/Post';
 import {
     deletePostById,
+    getPostByKey,
     getPostByOther,
     getPostByUserId,
     postPost,
@@ -31,6 +32,7 @@ const SELECT_OTHER_POST = 'SELECT_OTHER_POST';
 // const UPDATE_POST = 'UPDATE_POST';
 const DELETE_POST = 'DELETE_POST';
 const INSERT_POST = 'INSERT_POST';
+const SELECT_POST_BY_KEY = 'SELECT_POST_BY_KEY';
 
 export const selectMyPost = createAsyncThunk(
     SELECT_MY_POST,
@@ -86,6 +88,16 @@ export const insertPosts = createAsyncThunk(
     }
 );
 
+export const selectPostsByKey = createAsyncThunk(
+    SELECT_POST_BY_KEY,
+    async ({ searchKey, userId }, thunkAPI) => {
+        const reg = new RegExp(searchKey, 'g');
+        const { posts } = thunkAPI.getState().posts;
+        const myPosts = await getPostByKey(posts, reg, userId);
+        return myPosts;
+    }
+);
+
 export const postsSlice = createSlice({
     name: 'posts',
     initialState,
@@ -119,6 +131,28 @@ export const postsSlice = createSlice({
             })
             .addCase(insertPosts.fulfilled, (state, { payload }) => {
                 return { ...state, posts: payload };
+            })
+            .addCase(selectPostsByKey.pending, (state) => {
+                const newOtherPosts = { ...state.otherPosts };
+                newOtherPosts.loading = true;
+                return { ...state, otherPosts: newOtherPosts };
+            })
+            .addCase(selectPostsByKey.fulfilled, (state, { payload }) => {
+                const newOthersPosts = { ...state.otherPosts };
+                newOthersPosts.loading = false;
+                if (payload) {
+                    newOthersPosts.posts = payload;
+                    return { ...state, otherPosts: newOthersPosts };
+                } else {
+                    newOthersPosts.message = '글이 없습니다.';
+                    return { ...state, otherPosts: newOthersPosts };
+                }
+            })
+            .addCase(selectPostsByKey.rejected, (state, { error }) => {
+                const newOtherPosts = { ...state.otherPosts };
+                newOtherPosts.loading = false;
+                newOtherPosts.message = error.message;
+                return { ...state, otherPosts: newOtherPosts };
             });
     },
 });

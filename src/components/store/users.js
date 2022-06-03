@@ -3,6 +3,7 @@ import { Users } from '../../data/User';
 import {
     checkId,
     getUserById,
+    getUserByKey,
     getUserByUserId,
     loginApi,
     logoutApi,
@@ -25,6 +26,7 @@ const UPDATE_USERS = 'UPDATE_USERS';
 const SELECT_USER_BY_ID = 'SELECT_USER_BY_ID';
 const SELEct_USER_BY_USERID = 'SELECT_USER_BY_USERID';
 const LOGOUT = 'LOGOUT';
+const SELECT_USER_BY_KEY = 'SELECT_USER_BY_KEY';
 
 export const logout = createAsyncThunk(LOGOUT, async (payload, thunkAPI) => {
     const { myId } = thunkAPI.getState().users;
@@ -94,6 +96,16 @@ export const selectUserByUserId = createAsyncThunk(
         const { users } = thunkAPI.getState().users;
         const newUser = await getUserByUserId(users, userId);
         return newUser;
+    }
+);
+
+export const selectUserByKey = createAsyncThunk(
+    SELECT_USER_BY_KEY,
+    async (key, thunkAPI) => {
+        const { users } = thunkAPI.getState().users;
+        const reg = new RegExp(key, 'g'); //패턴을 사용해 텍스트를 판별
+        const newUsers = await getUserByKey(users, reg);
+        return newUsers?.id;
     }
 );
 

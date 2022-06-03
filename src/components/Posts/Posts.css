@@ -1,19 +1,15 @@
 .Posts {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
+    place-items: center;
 }
 
 .PostsImgBox {
     cursor: pointer;
-    position: relative;
     height: 230px;
-    
+    aspect-ratio: 1;
 }
 
 .PostsImg {
     width: 100%;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);   
 }
